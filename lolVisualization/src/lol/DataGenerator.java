@@ -1,6 +1,7 @@
 package lol;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,29 +21,40 @@ public class DataGenerator {
 	public static void main(String[] args) {
         Twitter twitter = new TwitterFactory().getInstance();
         try {
-        	String hashtag = "#leagueoflegends Darius";
-            Query query = new Query("#leagueoflegends Darius");
-            List<Status> totalTweets = new ArrayList<Status>();
-            QueryResult result;
-            do {
-                result = twitter.search(query);
-                List<Status> tweets = result.getTweets();
-                totalTweets.addAll(tweets);
-                System.out.println("result count- "+tweets.size());
-                for (Status tweet : tweets) {
-					System.out.println("@" +tweet.getCreatedAt()+ " - " + tweet.getUser().getScreenName() + " - " + tweet.getText());
-                }
-            } while ((query = result.nextQuery()) != null);
-            
-           System.out.println("TOTAL COUNT for " +hashtag+ ": "+totalTweets.size());
-           
-           Map<String, List<Status>> resultByDate = aggregateResultsByDate(totalTweets);
-            
-            System.out.println("-------------TOTAL COUNT for " +hashtag+ "---------");
-            for(String date: resultByDate.keySet())
-            {
-            	System.out.println("KEY: "+date+" COUNT : " +resultByDate.get(date).size());
-            }
+        	String hashtag = "#leagueoflegends";
+        	List<String> champions = Arrays.asList("Amumu", "Cho Gath", "Darius", "Draven", "Garen", "Jarvan", 
+        											"Jayce", "Karthus", "Katarina", "Lee Sin", "Lux", "Nidalee", 
+        											"Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
+			for (String champion : champions) {
+				
+				System.out.println("Fetching tweets for "+ champion );
+				String queryString = hashtag + " " + champion;
+				Query query = new Query(queryString);
+				List<Status> totalTweets = new ArrayList<Status>();
+				QueryResult result;
+				do {
+					result = twitter.search(query);
+					List<Status> tweets = result.getTweets();
+					totalTweets.addAll(tweets);
+					System.out.println("Each query count- " + tweets.size());
+//					for (Status tweet : tweets) {
+//						System.out.println("@" + tweet.getCreatedAt() + " - "
+//									+ tweet.getUser().getScreenName() + " - "	+ tweet.getText());
+//					}
+				} while ((query = result.nextQuery()) != null);
+
+				System.out.println("TOTAL COUNT for " + queryString + ": "	+ totalTweets.size());
+				if(!totalTweets .isEmpty())
+				{
+
+				Map<String, List<Status>> resultByDate = aggregateResultsByDate(totalTweets);
+
+				System.out.println("-------------DATA for " + champion+ "---------");
+				for (String date : resultByDate.keySet()) {
+					System.out.println("KEY: " + date + " COUNT : "	+ resultByDate.get(date).size());
+				}
+				}
+			}
             
             System.exit(0);
         } catch (TwitterException te) {
