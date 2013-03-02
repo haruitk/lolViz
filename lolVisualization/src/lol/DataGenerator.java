@@ -1,18 +1,11 @@
 package lol;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.utility.Iterate;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -42,20 +35,14 @@ public class DataGenerator {
             } while ((query = result.nextQuery()) != null);
             
            System.out.println("TOTAL COUNT for " +hashtag+ ": "+totalTweets.size());
-//            Map<String, List<Status>> resultByDate = new HashMap<String, List<Status>>();
-//            Iterate.addToMap(totalTweets,new Function<Status, String>(){
-//				public String valueOf(Status tweet) {
-//					Calendar calendar = Calendar.getInstance();
-//					calendar.setTime(tweet.getCreatedAt());
-//					String format = calendar.get(Calendar.MONTH) + 1 + "/" +calendar.get(Calendar.DATE)+ "/" + calendar.get(Calendar.YEAR) ;
-//					return format;
-//				}} , resultByDate);
-//            
-//            System.out.println("-------------TOTAL COUNT for " +hashtag+ "---------");
-//            for(String date: resultByDate.keySet())
-//            {
-//            	System.out.println("KEY: "+date+" COUNT : " +resultByDate.get(date).size());
-//            }
+           
+           Map<String, List<Status>> resultByDate = aggregateResultsByDate(totalTweets);
+            
+            System.out.println("-------------TOTAL COUNT for " +hashtag+ "---------");
+            for(String date: resultByDate.keySet())
+            {
+            	System.out.println("KEY: "+date+" COUNT : " +resultByDate.get(date).size());
+            }
             
             System.exit(0);
         } catch (TwitterException te) {
@@ -64,5 +51,34 @@ public class DataGenerator {
             System.exit(-1);
         }
     }
+	
+	private static Map<String, List<Status>> aggregateResultsByDate(List<Status> totalTweets) {
+		Map<String, List<Status>> resultsByDate = new HashMap<String, List<Status>>();
+		for(Status tweet: totalTweets)
+		{
+			String dateKey = getFormattedDate(tweet.getCreatedAt());
+			List<Status> tweetsPerDate = resultsByDate.get(dateKey);
+			if(tweetsPerDate==null || tweetsPerDate.isEmpty())
+			{
+				List<Status> tweets = new ArrayList<Status>();
+				tweets.add(tweet);
+				resultsByDate.put(dateKey, tweets);	
+			}
+			else
+			{
+				tweetsPerDate.add(tweet);
+			}
+			
+		}
+		return resultsByDate;
+		
+}
 
+private static String getFormattedDate(Date date)
+{
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTime(date);
+	String format = calendar.get(Calendar.MONTH) + 1 + "/" +calendar.get(Calendar.DATE)+ "/" + calendar.get(Calendar.YEAR) ;
+	return format;
+}
 }
