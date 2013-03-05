@@ -26,6 +26,13 @@ public class DataGenerator2 {
 					"Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
 			
 			Map<String, Map<String, List<Status>>> tweetsByChampion = getTwitterData( champions);
+			for (String champion : tweetsByChampion.keySet()) {
+				Map<String, List<Status>> resultByDate  = (Map<String, List<Status>>)tweetsByChampion.get(champion);
+				System.out.println("----FOR----: "+ champion);
+			for (String date : resultByDate.keySet()) {
+				System.out.println("KEY: " + date + " COUNT : "	+ resultByDate.get(date).size());
+			}
+			}
 	}
 	
 	private static Map<String, Map<String, List<Status>>> getTwitterData(List<String> champions ) {

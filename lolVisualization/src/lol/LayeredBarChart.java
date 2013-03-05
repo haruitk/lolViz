@@ -55,7 +55,7 @@ public class LayeredBarChart extends ApplicationFrame
 
 	private static JFreeChart createChart(CategoryDataset categorydataset)
 	{
-		JFreeChart jfreechart = ChartFactory.createBarChart("Lol Visualization Chart", "Category", "Value", categorydataset, PlotOrientation.VERTICAL, true, true, false);
+		JFreeChart jfreechart = ChartFactory.createBarChart("Lol Visualization Chart", "Champions", "Value", categorydataset, PlotOrientation.VERTICAL, true, true, false);
 		CategoryPlot categoryplot = (CategoryPlot)jfreechart.getPlot();
 		categoryplot.setDomainGridlinesVisible(true);
 		categoryplot.setRangePannable(true);
@@ -85,7 +85,7 @@ public class LayeredBarChart extends ApplicationFrame
 
 	public static void main(String args[])
 	{
-		LayeredBarChart LayeredBarChart = new LayeredBarChart("JFreeChart: LayeredBarChart.java");
+		LayeredBarChart LayeredBarChart = new LayeredBarChart("Lol Visualization Chart");
 		LayeredBarChart.pack();
 		RefineryUtilities.centerFrameOnScreen(LayeredBarChart);
 		LayeredBarChart.setVisible(true);
