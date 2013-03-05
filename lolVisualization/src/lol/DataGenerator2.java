@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
