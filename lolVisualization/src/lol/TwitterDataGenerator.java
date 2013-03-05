@@ -15,17 +15,21 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
-public class DataGenerator2 {
+public class TwitterDataGenerator {
 
-	/**
-	 * @param args
-	 */
+	private List<String> champions;
+	
+	public TwitterDataGenerator(List<String> champions)
+	{
+		this.setChampions(champions);
+	}
+	
 	public static void main(String[] args) {
 			List<String> champions = Arrays.asList("Amumu", "Cho Gath", "Darius", "Draven", "Garen", "Jarvan", 
 					"Jayce", "Karthus", "Katarina", "Lee Sin", "Lux", "Nidalee", 
 					"Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
-			
-			Map<String, Map<String, List<Status>>> tweetsByChampion = getTwitterData( champions);
+			TwitterDataGenerator generator = new TwitterDataGenerator(champions);
+			Map<String, Map<String, List<Status>>> tweetsByChampion = generator.getTwitterData();
 			for (String champion : tweetsByChampion.keySet()) {
 				Map<String, List<Status>> resultByDate  = (Map<String, List<Status>>)tweetsByChampion.get(champion);
 				System.out.println("----FOR----: "+ champion);
@@ -35,7 +39,7 @@ public class DataGenerator2 {
 			}
 	}
 	
-	private static Map<String, Map<String, List<Status>>> getTwitterData(List<String> champions ) {
+	public Map<String, Map<String, List<Status>>> getTwitterData() {
 		Map<String, Map<String, List<Status>>> tweetsByChampion = new HashMap<String, Map<String, List<Status>>>();
 		
 		//ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -51,7 +55,7 @@ public class DataGenerator2 {
 			// "Darius", "Draven", "Garen", "Jarvan",
 			// "Jayce", "Karthus", "Katarina", "Lee Sin", "Lux", "Nidalee",
 			// "Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
-			for (String champion : champions) {
+			for (String champion : this.getChampions()) {
 
 				System.out.println("Fetching tweets for " + champion);
 				String queryString = hashtag + " " + champion;
@@ -79,7 +83,7 @@ public class DataGenerator2 {
 		return tweetsByChampion;
 	}
 	
-	private static List<Status> getTweetsForAChampion(Twitter twitter,
+	private List<Status> getTweetsForAChampion(Twitter twitter,
 			String queryString, Query query) throws TwitterException {
 		List<Status> totalTweets = new ArrayList<Status>();
 		QueryResult result;
@@ -87,7 +91,7 @@ public class DataGenerator2 {
 			result = twitter.search(query);
 			List<Status> tweets = result.getTweets();
 			totalTweets.addAll(tweets);
-			System.out.println("Each query count- " + tweets.size());
+			//System.out.println("Each query count- " + tweets.size());
 			// for (Status tweet : tweets) {
 			// System.out.println("@" + tweet.getCreatedAt() + " - "
 			// + tweet.getUser().getScreenName() + " - " + tweet.getText());
@@ -99,7 +103,7 @@ public class DataGenerator2 {
 		return totalTweets;
 	}
 
-	private static Map<String, List<Status>> aggregateResultsByDate(
+	private Map<String, List<Status>> aggregateResultsByDate(
 			List<Status> totalTweets) {
 		Map<String, List<Status>> resultsByDate = new HashMap<String, List<Status>>();
 		for (Status tweet : totalTweets) {
@@ -118,13 +122,21 @@ public class DataGenerator2 {
 
 	}
 
-	private static String getFormattedDate(Date date) {
+	private String getFormattedDate(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		String format = calendar.get(Calendar.MONTH) + 1 + "/"
 				+ calendar.get(Calendar.DATE) + "/"
 				+ calendar.get(Calendar.YEAR);
 		return format;
+	}
+
+	public List<String> getChampions() {
+		return champions;
+	}
+
+	public void setChampions(List<String> champions) {
+		this.champions = champions;
 	}
 
 

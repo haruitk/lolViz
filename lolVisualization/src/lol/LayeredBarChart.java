@@ -1,8 +1,17 @@
 package lol;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GradientPaint;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JPanel;
-import org.jfree.chart.*;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
@@ -13,6 +22,8 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 import org.jfree.util.SortOrder;
 
+import twitter4j.Status;
+
 public class LayeredBarChart extends ApplicationFrame
 {
 
@@ -20,42 +31,36 @@ public class LayeredBarChart extends ApplicationFrame
 	{
 		super(s);
 		JPanel jpanel = createPanel();
-		jpanel.setPreferredSize(new Dimension(500, 270));
+		jpanel.setPreferredSize(new Dimension(1000, 600));
 		setContentPane(jpanel);
 	}
 
 	private static CategoryDataset createDataset()
 	{
-		String s = "First";
-		String s1 = "Second";
-		String s2 = "Third";
-		String s3 = "Category 1";
-		String s4 = "Category 2";
-		String s5 = "Category 3";
-		String s6 = "Category 4";
-		String s7 = "Category 5";
 		DefaultCategoryDataset defaultcategorydataset = new DefaultCategoryDataset();
-		defaultcategorydataset.addValue(1.0D, s, s3);
-		defaultcategorydataset.addValue(4D, s, s4);
-		defaultcategorydataset.addValue(3D, s, s5);
-		defaultcategorydataset.addValue(5D, s, s6);
-		defaultcategorydataset.addValue(5D, s, s7);
-		defaultcategorydataset.addValue(5D, s1, s3);
-		defaultcategorydataset.addValue(7D, s1, s4);
-		defaultcategorydataset.addValue(6D, s1, s5);
-		defaultcategorydataset.addValue(8D, s1, s6);
-		defaultcategorydataset.addValue(4D, s1, s7);
-		defaultcategorydataset.addValue(4D, s2, s3);
-		defaultcategorydataset.addValue(3D, s2, s4);
-		defaultcategorydataset.addValue(2D, s2, s5);
-		defaultcategorydataset.addValue(3D, s2, s6);
-		defaultcategorydataset.addValue(6D, s2, s7);
+		List<String> champions = Arrays.asList("Amumu", "Cho Gath", "Darius", "Draven", "Garen", "Jarvan", 
+				"Jayce", "Karthus", "Katarina", "Lee Sin", "Lux", "Nidalee", 
+				"Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
+		
+		TwitterDataGenerator dataGenerator = new TwitterDataGenerator(champions);
+		Map<String, Map<String, List<Status>>> tweetsByChampion = dataGenerator.getTwitterData();
+		
+		
+		for (String champion : tweetsByChampion.keySet()) {
+			Map<String, List<Status>> resultByDate  = (Map<String, List<Status>>)tweetsByChampion.get(champion);
+			//System.out.println("----FOR----: "+ champion);
+		for (String date : resultByDate.keySet()) {
+			//System.out.println("KEY: " + date + " COUNT : "	+ resultByDate.get(date).size());
+			defaultcategorydataset.addValue(resultByDate.get(date).size(), champion, date);
+			
+		}
+		}
 		return defaultcategorydataset;
 	}
 
 	private static JFreeChart createChart(CategoryDataset categorydataset)
 	{
-		JFreeChart jfreechart = ChartFactory.createBarChart("Lol Visualization Chart", "Champions", "Value", categorydataset, PlotOrientation.VERTICAL, true, true, false);
+		JFreeChart jfreechart = ChartFactory.createBarChart("League of Legends: Champions", "Champions", "# of tweets", categorydataset, PlotOrientation.VERTICAL, true, true, false);
 		CategoryPlot categoryplot = (CategoryPlot)jfreechart.getPlot();
 		categoryplot.setDomainGridlinesVisible(true);
 		categoryplot.setRangePannable(true);
@@ -72,6 +77,7 @@ public class LayeredBarChart extends ApplicationFrame
 		layeredbarrenderer.setSeriesPaint(0, gradientpaint);
 		layeredbarrenderer.setSeriesPaint(1, gradientpaint1);
 		layeredbarrenderer.setSeriesPaint(2, gradientpaint2);
+		categoryplot.setOutlineVisible(true);
 		return jfreechart;
 	}
 
