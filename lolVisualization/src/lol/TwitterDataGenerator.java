@@ -24,20 +24,20 @@ public class TwitterDataGenerator {
 		this.setChampions(champions);
 	}
 	
-	public static void main(String[] args) {
-			List<String> champions = Arrays.asList("Amumu", "Cho Gath", "Darius", "Draven", "Garen", "Jarvan", 
-					"Jayce", "Karthus", "Katarina", "Lee Sin", "Lux", "Nidalee", 
-					"Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
-			TwitterDataGenerator generator = new TwitterDataGenerator(champions);
-			Map<String, Map<String, List<Status>>> tweetsByChampion = generator.getTwitterData();
-			for (String champion : tweetsByChampion.keySet()) {
-				Map<String, List<Status>> resultByDate  = (Map<String, List<Status>>)tweetsByChampion.get(champion);
-				System.out.println("----FOR----: "+ champion);
-			for (String date : resultByDate.keySet()) {
-				System.out.println("KEY: " + date + " COUNT : "	+ resultByDate.get(date).size());
-			}
-			}
-	}
+//	public static void main(String[] args) {
+//			List<String> champions = Arrays.asList("Amumu", "Cho Gath", "Darius", "Draven", "Garen", "Jarvan", 
+//					"Jayce", "Karthus", "Katarina", "Lee Sin", "Lux", "Nidalee", 
+//					"Olaf", "Poppy", "Rengar", "Varus", "Wukong", "Xin");
+//			TwitterDataGenerator generator = new TwitterDataGenerator(champions);
+//			Map<String, Map<String, List<Status>>> tweetsByChampion = generator.getTwitterData();
+//			for (String champion : tweetsByChampion.keySet()) {
+//				Map<String, List<Status>> resultByDate  = (Map<String, List<Status>>)tweetsByChampion.get(champion);
+//				System.out.println("----FOR----: "+ champion);
+//			for (String date : resultByDate.keySet()) {
+//				System.out.println("KEY: " + date + " COUNT : "	+ resultByDate.get(date).size());
+//			}
+//			}
+//	}
 	
 	public Map<String, Map<String, List<Status>>> getTwitterData() {
 		Map<String, Map<String, List<Status>>> tweetsByChampion = new HashMap<String, Map<String, List<Status>>>();

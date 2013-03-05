@@ -24,10 +24,10 @@ import org.jfree.util.SortOrder;
 
 import twitter4j.Status;
 
-public class LayeredBarChart extends ApplicationFrame
+public class LolVisualization extends ApplicationFrame
 {
 
-	public LayeredBarChart(String s)
+	public LolVisualization(String s)
 	{
 		super(s);
 		JPanel jpanel = createPanel();
@@ -91,9 +91,9 @@ public class LayeredBarChart extends ApplicationFrame
 
 	public static void main(String args[])
 	{
-		LayeredBarChart LayeredBarChart = new LayeredBarChart("Lol Visualization Chart");
-		LayeredBarChart.pack();
-		RefineryUtilities.centerFrameOnScreen(LayeredBarChart);
-		LayeredBarChart.setVisible(true);
+		LolVisualization layeredBarChart = new LolVisualization("Lol Visualization Chart");
+		layeredBarChart.pack();
+		RefineryUtilities.centerFrameOnScreen(layeredBarChart);
+		layeredBarChart.setVisible(true);
 	}
 }
