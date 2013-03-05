@@ -60,13 +60,13 @@ public class DataGenerator2 {
 				if (!totalTweets.isEmpty()) {
 
 					Map<String, List<Status>> resultByDate = aggregateResultsByDate(totalTweets);
-
-					System.out.println("-------------DATA for " + champion
-							+ "---------");
-					for (String date : resultByDate.keySet()) {
-						System.out.println("KEY: " + date + " COUNT : "
-								+ resultByDate.get(date).size());
-					}
+//
+//					System.out.println("-------------DATA for " + champion
+//							+ "---------");
+//					for (String date : resultByDate.keySet()) {
+//						System.out.println("KEY: " + date + " COUNT : "
+//								+ resultByDate.get(date).size());
+//					}
 					tweetsByChampion.put(champion, resultByDate);
 				}
 
